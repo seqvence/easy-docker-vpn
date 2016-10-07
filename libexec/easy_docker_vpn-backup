@@ -1,0 +1,25 @@
+#!/bin/bash
+# Usage: %COMMAND% > backup.tgz
+# Summary: Back up VPN data
+# Help: This will generate a tarball to stdout.
+#
+# Examples:
+#
+#    # backup to file based on day of the week
+#    %COMMAND% > ovpn_backup_$(date +%a).tgz
+#
+#    # backup to S3
+#    %COMMAND% | aws s3 cp - s3://mybucket/backup.tgz
+#
+
+. $_EASY_DOCKER_VPN_ROOT/vars.sh
+. $_EASY_DOCKER_VPN_ROOT/funcs.sh
+
+_ensure_vpn_data
+
+if [ -t 1 ] ; then
+	echo "This command dumps the backup to stdout as a tarball, re-run with a pipe or redirection"
+	exit 1
+fi
+
+docker run --volumes-from $OVPN_DATA -a stdout --rm $OVPN_IMAGE tar -czf - /etc/openvpn

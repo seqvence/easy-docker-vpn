@@ -1,0 +1,20 @@
+#!/bin/bash
+# Usage: %COMMAND% management
+# Summary: Connect to the management port
+# Help: This provides a way of running arbitrary management commands
+#
+# Examples:
+#
+#    # connect to the management port
+#    %COMMAND% management
+#
+
+. $_EASY_DOCKER_VPN_ROOT/vars.sh
+. $_EASY_DOCKER_VPN_ROOT/funcs.sh
+
+_ensure_vpn_data
+
+set -e
+
+# docker exec -it $OVPN_CONT bash -c "type nc || apk --update add netcat-openbsd"
+docker exec -it $OVPN_CONT nc 127.0.0.1 7505

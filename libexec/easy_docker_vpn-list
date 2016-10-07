@@ -1,0 +1,11 @@
+#!/bin/bash
+# Usage: %COMMAND%
+# Summary: Lists users and their revocation status
+# Help: Lists users and their revocation status
+
+. $_EASY_DOCKER_VPN_ROOT/vars.sh
+. $_EASY_DOCKER_VPN_ROOT/funcs.sh
+
+_ensure_vpn_data
+
+docker run --volumes-from $OVPN_DATA --rm -it $OVPN_IMAGE ovpn_listclients

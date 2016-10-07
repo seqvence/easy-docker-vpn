@@ -1,0 +1,12 @@
+#!/bin/bash
+# Usage: %COMMAND%
+# Summary: Show VPN status
+# Help: This tails a log file in the openvpn container showing status
+#
+
+. $_EASY_DOCKER_VPN_ROOT/vars.sh
+. $_EASY_DOCKER_VPN_ROOT/funcs.sh
+
+_ensure_vpn_data
+
+docker exec -it $OVPN_CONT ovpn_status

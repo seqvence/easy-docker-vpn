@@ -1,0 +1,27 @@
+#!/bin/bash
+# Usage: %COMMAND% backup.tgz
+# Summary: Restore a VPN backup
+# Help: This will create a new VPN using the data from the supplied backup.
+#
+# Examples:
+#
+#    # restore a backup
+#    %COMMAND% ovpn_backup.tgz
+#
+
+set -e
+
+. $_EASY_DOCKER_VPN_ROOT/vars.sh
+. $_EASY_DOCKER_VPN_ROOT/funcs.sh
+
+RESTORE_TARBALL=$1
+if [[ -z $RESTORE_TARBALL ]]; then
+	echo "To restore, pass the backup tarball name as the first argument"
+	exit 1
+fi
+
+_ensure_no_vpn_data
+
+docker create --name $OVPN_DATA -v /etc/openvpn busybox
+cat $RESTORE_TARBALL | docker run --rm -i --volumes-from $OVPN_DATA busybox tar xzvf - -C /
+_start_vpn

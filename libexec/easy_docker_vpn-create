@@ -1,0 +1,29 @@
+#!/bin/bash
+# Usage: %COMMAND% <ovpn_genconfig options>
+# Summary: Create a VPN
+# Help: This will initialize and run a brand new VPN.  The following
+# ovpn_genconfig options are turned on already:
+#
+#  '-e "management localhost 7505"' run management port
+#
+# Examples:
+#
+#    # Create a VPN connecting to vpn.domain.com
+#    %COMMAND% -u udp://vpn.domain.com
+#
+#    # Create a VPN connecting to vpn.domain.com with custom server address and pushed route
+#    %COMMAND% -u udp://vpn.domain.com -s 192.168.100.0/24 -p "route 10.0.0.0 255.255.0.0"
+#
+
+set -e
+
+. $_EASY_DOCKER_VPN_ROOT/vars.sh
+. $_EASY_DOCKER_VPN_ROOT/funcs.sh
+
+_ensure_no_vpn_data
+
+docker create --name $OVPN_DATA -v /etc/openvpn busybox
+docker run --volumes-from $OVPN_DATA --rm $OVPN_IMAGE ovpn_genconfig -e "management localhost 7505" "$@"
+docker run --volumes-from $OVPN_DATA --rm -it $OVPN_IMAGE ovpn_initpki
+docker run --rm -it --volumes-from $OVPN_DATA $OVPN_IMAGE easyrsa gen-crl
+_start_vpn

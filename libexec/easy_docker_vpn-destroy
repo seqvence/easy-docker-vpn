@@ -1,0 +1,21 @@
+#!/bin/bash
+# Usage: %COMMAND%
+# Summary: Destroy VPN completely
+# Help: This will stop the VPN process and destroy all VPN data.
+#
+
+. $_EASY_DOCKER_VPN_ROOT/vars.sh
+. $_EASY_DOCKER_VPN_ROOT/funcs.sh
+
+_ensure_vpn_data
+
+echo "This will completely destroy the VPN and all certificates."
+read -r -p "Are you sure? [type YES to confirm] " response
+
+if [[ $response != YES ]]; then
+	echo "Skipping destruction."
+	exit
+fi
+
+docker stop $OVPN_CONT
+docker rm $OVPN_CONT $OVPN_DATA

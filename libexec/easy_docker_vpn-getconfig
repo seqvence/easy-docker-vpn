@@ -1,0 +1,21 @@
+#!/bin/bash
+# Usage: %COMMAND% user
+# Summary: Gets VPN configuration for user
+# Help: This will generate a file in the local directory called $user.conn.ovpn
+#
+
+. $_EASY_DOCKER_VPN_ROOT/vars.sh
+. $_EASY_DOCKER_VPN_ROOT/funcs.sh
+
+_ensure_vpn_data
+
+USER=$1
+
+if [[ -z $USER ]]; then
+	echo "Missing required argument user"
+	exit 1
+fi
+
+docker run --volumes-from $OVPN_DATA --rm -it $OVPN_IMAGE ovpn_getclient $USER > $USER.conn.ovpn
+
+echo "Config for $USER saved to $USER.conn.ovpn"

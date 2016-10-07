@@ -1,0 +1,36 @@
+#!/bin/bash
+# Usage: %COMMAND% user
+# Summary: Revoke certificate for user
+# Help: This revokes the certificate for the specified user
+#
+# Examples:
+#
+#    # revoke sally's certificate
+#    %COMMAND% sally
+#
+
+. $_EASY_DOCKER_VPN_ROOT/vars.sh
+. $_EASY_DOCKER_VPN_ROOT/funcs.sh
+
+_ensure_vpn_data
+
+USER=$1
+
+if [[ -z $USER ]]; then
+	echo "Missing required argument user"
+	exit 1
+fi
+
+set -e
+
+# Revoke cert
+docker run --rm -it --volumes-from $OVPN_DATA $OVPN_IMAGE easyrsa revoke $USER || true
+
+# Regenerate CRL and fix permissions
+docker run --rm -it --volumes-from $OVPN_DATA $OVPN_IMAGE easyrsa gen-crl
+docker run --rm -it --volumes-from $OVPN_DATA -w /etc/openvpn $OVPN_IMAGE cp pki/crl.pem crl.pem
+docker run --rm -it --volumes-from $OVPN_DATA -w /etc/openvpn $OVPN_IMAGE chmod 644 crl.pem
+
+# Disconnect existing connections
+# docker exec -it $OVPN_CONT bash -c "type nc || apk --update add netcat-openbsd"
+docker exec -it $OVPN_CONT bash -c "echo 'kill $USER' | nc 127.0.0.1 7505"
