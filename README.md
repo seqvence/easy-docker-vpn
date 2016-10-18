@@ -20,7 +20,7 @@ Manage a Docker based OpenVPN instance with ease.
 
 ### Via Docker
 
-1. Pull the image: `docker pull nate/easy-docker-vpn`.
+1. Pull the image: `docker pull mediatemple/easy-docker-vpn`.
 2. Extract the wrapper: `docker run --rm -i easy-docker-vpn cat /wrapper > easy_docker_vpn && chmod +x easy_docker_vpn`
 
 ## Create a VPN
