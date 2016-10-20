@@ -6,4 +6,4 @@ RUN apk add --update bash python && \
 
 COPY . /code/
 COPY wrapper /wrapper
-ENTRYPOINT ["/code/docker/entrypoint.sh"]
+ENTRYPOINT ["/code/entrypoint.sh"]
