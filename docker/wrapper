@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# only turn on tty if not the backup command
+TTY=
+if [ "$1" != "backup" ]; then
+    TTY="-t"
+fi
+
+docker run --rm -i $TTY -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):$(pwd) -w $(pwd) mediatemple/easy-docker-vpn:latest "$@"
