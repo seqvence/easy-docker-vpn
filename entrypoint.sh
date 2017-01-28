@@ -6,5 +6,5 @@ if [ "$1" == "cat" ]; then
 else
 	eval "$(/code/bin/easy_docker_vpn init -)"
 
-	eval easy_docker_vpn "$@"
+	easy_docker_vpn "$@"
 fi
