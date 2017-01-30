@@ -26,7 +26,9 @@ fi
 
 set -e
 
-docker run --volumes-from $OVPN_DATA --rm -it $OVPN_IMAGE easyrsa build-client-full $*
-docker run --volumes-from $OVPN_DATA --rm -it $OVPN_IMAGE ovpn_getclient $USER > $USER.conn.ovpn
+VOLUME_ARG=$(_volume_arg)
+
+docker run --rm -it $VOLUME_ARG $OVPN_IMAGE easyrsa build-client-full $*
+docker run --rm -it $VOLUME_ARG $OVPN_IMAGE ovpn_getclient $USER > $USER.conn.ovpn
 
 echo "Config for $USER saved to $USER.conn.ovpn"

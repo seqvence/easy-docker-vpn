@@ -18,4 +18,10 @@ if [[ $response != YES ]]; then
 fi
 
 docker stop $OVPN_CONT
-docker rm $OVPN_CONT $OVPN_DATA
+docker rm $OVPN_CONT
+
+if [[ "$(_volume_mode)" == "container" ]]; then
+	docker rm $OVPN_DATA
+else
+	docker volume rm $OVPN_DATA
+fi
