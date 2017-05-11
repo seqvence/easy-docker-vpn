@@ -8,4 +8,6 @@
 
 _ensure_vpn_data
 
-docker run --volumes-from $OVPN_DATA --rm -it $OVPN_IMAGE ovpn_listclients
+VOLUME_ARG=$(_volume_arg)
+
+docker run --rm -it $VOLUME_ARG $OVPN_IMAGE ovpn_listclients

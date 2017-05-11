@@ -22,4 +22,6 @@ if [ -t 1 ] ; then
 	exit 1
 fi
 
-docker run --volumes-from $OVPN_DATA -a stdout --rm $OVPN_IMAGE tar -czf - /etc/openvpn
+VOLUME_ARG=$(_volume_arg)
+
+docker run $VOLUME_ARG -a stdout --rm $OVPN_IMAGE tar -czf - /etc/openvpn

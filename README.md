@@ -4,10 +4,22 @@ Manage a Docker based OpenVPN instance with ease.
 
 # Overview
 
-`easy_docker_vpn` is a script that manages an instance of OpenVPN running inside of a Docker container.  The image that it uses is [kylemanna/openvpn](https://hub.docker.com/r/kylemanna/openvpn/) ([source here](https://github.com/kylemanna/docker-openvpn)).  There are two containers in the system:
+`easy_docker_vpn` is a script that manages an instance of OpenVPN running inside of a Docker container.  The image that it uses is [kylemanna/openvpn](https://hub.docker.com/r/kylemanna/openvpn/) ([source here](https://github.com/kylemanna/docker-openvpn)).  Here is what the VPN uses:
 
-* ovpn-data - a container based on busybox that specifies a volume for /etc/openvpn
-* openvpn - the container that shares the volume from ovpn-data and runs the actual VPN process
+* ovpn-data - a volume for /etc/openvpn
+* openvpn - the container that uses the ovpn-data volume and runs the actual VPN process
+
+## Migration to volume
+
+NOTE: previous versions of this application used an ovpn-data *container* instead of a *volume*.  If a container is detected, it will continue to be used.
+
+To migrate from the old container mode to the new volume mode is as simple as a backup and restore:
+
+```
+$ easy_docker_vpn backup > temp_backup.tgz
+$ easy_docker_vpn destroy
+$ easy_docker_vpn restore temp_backup.tgz
+```
 
 # Getting Started
 

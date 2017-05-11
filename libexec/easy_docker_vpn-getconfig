@@ -16,6 +16,8 @@ if [[ -z $USER ]]; then
 	exit 1
 fi
 
-docker run --volumes-from $OVPN_DATA --rm -it $OVPN_IMAGE ovpn_getclient $USER > $USER.conn.ovpn
+VOLUME_ARG=$(_volume_arg)
+
+docker run $VOLUME_ARG --rm -it $OVPN_IMAGE ovpn_getclient $USER > $USER.conn.ovpn
 
 echo "Config for $USER saved to $USER.conn.ovpn"

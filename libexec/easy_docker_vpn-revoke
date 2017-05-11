@@ -23,13 +23,15 @@ fi
 
 set -e
 
+VOLUME_ARG=$(_volume_arg)
+
 # Revoke cert
-docker run --rm -it --volumes-from $OVPN_DATA $OVPN_IMAGE easyrsa revoke $USER || true
+docker run --rm -it $VOLUME_ARG $OVPN_IMAGE easyrsa revoke $USER || true
 
 # Regenerate CRL and fix permissions
-docker run --rm -it --volumes-from $OVPN_DATA $OVPN_IMAGE easyrsa gen-crl
-docker run --rm -it --volumes-from $OVPN_DATA -w /etc/openvpn $OVPN_IMAGE cp pki/crl.pem crl.pem
-docker run --rm -it --volumes-from $OVPN_DATA -w /etc/openvpn $OVPN_IMAGE chmod 644 crl.pem
+docker run --rm -it $VOLUME_ARG $OVPN_IMAGE easyrsa gen-crl
+docker run --rm -it $VOLUME_ARG -w /etc/openvpn $OVPN_IMAGE cp pki/crl.pem crl.pem
+docker run --rm -it $VOLUME_ARG -w /etc/openvpn $OVPN_IMAGE chmod 644 crl.pem
 
 # Disconnect existing connections
 # docker exec -it $OVPN_CONT bash -c "type nc || apk --update add netcat-openbsd"
