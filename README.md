@@ -46,7 +46,7 @@ $ easy_docker_vpn create -u udp://vpn.domain.com
 Push an extra route:
 
 ```
-$ easy_docker_vpn create -u udp://vpn.domain.com -p 'route 172.17.0.1 255.255.255.0' -p "route 10.1.0.0 255.255.0.0"
+$ easy_docker_vpn create -u udp://vpn.domain.com -p 'route 172.17.0.0 255.255.255.0' -p "route 10.1.0.0 255.255.0.0"
 ```
 
 Create a VPN that doesn't route all traffic by default:
