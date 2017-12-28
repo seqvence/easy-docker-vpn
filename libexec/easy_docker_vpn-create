@@ -26,6 +26,6 @@ VOLUME_ARG=$(_volume_arg)
 
 docker volume create --name $OVPN_DATA
 docker run $VOLUME_ARG --rm $OVPN_IMAGE ovpn_genconfig -e "management localhost 7505" "$@"
-docker run --rm -it $VOLUME_ARG $OVPN_IMAGE ovpn_initpki
+docker run --rm -it $VOLUME_ARG $OVPN_IMAGE ovpn_initpki nopass
 docker run --rm -it $VOLUME_ARG $OVPN_IMAGE easyrsa gen-crl
 _start_vpn
